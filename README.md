@@ -1,6 +1,6 @@
 # A working CPU
 
-# 8-bit CPU — Built from Scratch in Verilog (Work in Progress)
+## 8-bit CPU — Built from Scratch in Verilog (Work in Progress)
 
 A custom 8-bit CPU built bottom-up in Verilog — starting from individual logic gates and progressing to a full datapath with a microcoded control unit, simulated and verified in AMD Xilinx Vivado.
 
