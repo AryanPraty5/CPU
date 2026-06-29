@@ -1,6 +1,6 @@
 module cpu
 (
-    input clk,reset
+    input clk,reset,reset_all
 );
 
     wire [7:0]bus;
@@ -15,7 +15,7 @@ module cpu
     wire pc_out,ce,reset_pc;
     wire [2:0]opcode;
 
-    control_unit cu(.clk(clk),.reset(reset),
+    control_unit cu(.clk(clk),.reset(reset),.reset_all(reset_all),
     .opcode(opcode),
     .load_acc(load_acc),.drive_acc(drive_acc),           
     .load_b(load_b),.drive_b(drive_b),            

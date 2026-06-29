@@ -7,22 +7,22 @@ module ram_model(
     reg [7:0] mem[0:15]; // 16 of the 8bits array acting as RAM
     reg [3:0]address;
     initial begin
-        mem[0] = 4'hf;
-        mem[1] = 4'he;
-        mem[2] = 4'hd;
-        mem[3] = 4'hc;
-        mem[4] = 4'hb;
-        mem[5] = 4'ha;
-        mem[6] = 4'h9;
-        mem[7] = 4'h3;
-        mem[8] = 4'h7;  //hehe
-        mem[9] = 4'h6;
-        mem[10] = 4'h5;
-        mem[11] = 4'h4;
-        mem[12] = 4'h3;
-        mem[13] = 4'h2;
-        mem[14] = 4'h1;
-        mem[15] = 4'h0;
+        mem[0] = 8'b0000_1000;  //8(operand 1)
+        mem[1] = 8'b0100_0101;  //5(operand 2)
+        mem[2] = 8'b0010_1011;  // for turning ADD on in opcode and address 11 for storing the value of ADD
+        mem[3] = 8'b0101_1000;  //jump to address 8
+        mem[4] = 8'b0000_0000;
+        mem[5] = 8'b0000_0000;
+        mem[6] = 8'b0000_0000;
+        mem[7] = 8'b0000_0000;
+        mem[8] = 8'b0100_0110;  //jumped to this address and it stores 6 for B
+        mem[9] = 8'b0011_1101;  // for turning SUB on in opcode and address 13 for storing the value of SUB
+        mem[10] = 8'b0111_0000; //  HALT
+        mem[11] = 8'b0000_0000;         //here ALU add will be stored
+        mem[12] = 8'b0000_0000;
+        mem[13] = 8'b0000_0000;         //here ALU sub will be stored
+        mem[14] = 8'b0000_0000;
+        mem[15] = 8'b0000_0000;
     end
 
     always@(posedge clk)

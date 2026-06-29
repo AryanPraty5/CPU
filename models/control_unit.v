@@ -1,6 +1,6 @@
 module control_unit
 (
-    input clk,reset,
+    input clk,reset,reset_all,
     input [2:0]opcode,
     output reg load_acc,drive_acc,        //acc functions    
     output reg load_b,drive_b,              //b functions
@@ -16,19 +16,17 @@ module control_unit
     reg [3:0]state;
 
     parameter LoadA1 = 1;
-    parameter LoadA2 = 2;
-    parameter LoadB1 = 3;
-    parameter LoadB2 = 4;
-    parameter Add = 5;
-    parameter Sub = 6;
-    parameter Jump = 7;
-    parameter Out = 8;
-    parameter Halt = 9;
-    parameter Store1 = 10;
-    parameter Store2 = 11;
-    parameter Fetch1 = 12;
-    parameter Fetch2 = 13;
-    parameter Decode = 14;
+    parameter LoadB1 = 2;
+    parameter Add = 3;
+    parameter Sub = 4;
+    parameter Jump = 5;
+    parameter Out = 6;
+    parameter Halt = 7;
+    parameter Store1 = 8;  
+    parameter Store2 = 9;  
+    parameter Fetch1 = 10;  //a
+    parameter Fetch2 = 11;  //b
+    parameter Decode = 12;  //c
     
 
     always@(posedge clk)
@@ -50,10 +48,11 @@ module control_unit
                                 3'b101: state <= Jump;
                                 3'b110: state <= Out;
                                 3'b111: state <= Halt;
+                                default: state<= Fetch1;
                                 endcase
                             end
-                    LoadA1 : state <= LoadA2;
-                    LoadA2 : state <= Fetch1;
+                    LoadA1 : state <= Fetch1;
+                    LoadB1 : state <= Fetch1;
                     Store1 : state <= Store2;
                     Store2 : state <= Fetch1;
                     Add    : state <= Store1;
@@ -65,28 +64,34 @@ module control_unit
                 end
         end
 
+        
+
         always@(*)
             begin
+                if(reset_all)begin
+                    reset_pc=1;reset_ir=1;reset_registers=1;
+                end
+                else
+                    begin   
                 pc_out =0;ce =0; wr =1; load_ir =0;drive_ir =0;load_acc =0;
-                drive_acc =0;load_b =0;drive_b=0;alu_drive =0;reset_registers=1;
-                jump =0;op = 2'b00;switch =0;reset_pc=1;reset_ir=1;
+                drive_acc =0;load_b =0;drive_b=0;alu_drive =0;reset_registers=0;
+                jump =0;op = 2'b00;switch =0;reset_pc=0;reset_ir=0;
                 case(state)
-                Fetch1 : begin pc_out = 1;wr = 1;reset_registers=0;reset_ir=0;reset_pc=0; end
+                Fetch1 : begin pc_out = 1;wr = 1; end
                 Fetch2 : begin wr = 0 ;load_ir = 1;ce = 1;end
-                LoadA1 : begin drive_ir = 1; wr = 1;end
-                LoadA2 : begin wr = 0;load_acc = 1;end
-                Store1 : begin drive_ir = 1;wr=0;switch=0;end   //the address where ACC's value is to be stored
-                Store2 : begin wr=0;switch=1;drive_acc=1;end
-                LoadB1 : begin drive_ir = 1; wr = 1;end
-                LoadB2 : begin wr=0;load_b=1;end
+                LoadA1 : begin drive_ir = 1;load_acc = 1;end
+                Store1 : begin wr=1;switch=0;drive_ir =1;end   //the address where ACC's value is to be stored
+                Store2 : begin wr=1;switch=1;drive_acc=1;end   //the value of ACC stored in the address read from STORE1
+                LoadB1 : begin drive_ir = 1;load_b=1;end
                 Add    : begin alu_drive=1;load_acc=1;op=2'b00;end
                 Sub    : begin alu_drive=1;load_acc=1;op=2'b11;end
-                Jump   : begin jump =1;end
+                Jump   : begin jump =1;drive_ir=1;end
                 Out    : begin drive_acc =1;end
                 Halt   : begin pc_out =0;ce =0; wr =1; load_ir =0;drive_ir =0;load_acc =0;
                 drive_acc =0;load_b =0;drive_b=0;alu_drive =0;jump =0;op = 2'b00;switch =0;  end
                 endcase
             end
+        end
 endmodule
 
 

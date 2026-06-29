@@ -2,11 +2,11 @@ module instruction__register
 (
     inout [7:0]bus,
     input clk,load,drive,reset,
-    output [2:0]opcode
+    output [3:0]opcode
 );
 
     reg [7:0]data;
-    wire [4:0]info;
+    wire [3:0]info;
     always@(posedge clk)
         begin
             if(reset)
@@ -15,7 +15,7 @@ module instruction__register
                 data <= bus;
         end
     
-    assign opcode = data[7:5];
-    assign info = data[4:0];
-    assign bus = (drive) ? info : 8'bz;
+    assign opcode = data[6:4];
+    assign info = data[3:0];
+    assign bus = (drive) ? {3'b000,info} : 8'bz;
 endmodule

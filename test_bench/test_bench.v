@@ -2,9 +2,9 @@
 
 module cpu_tb;
 
-reg clk,reset;
+reg clk,reset,reset_all;
 
-cpu CPU1(.clk(clk),.reset(reset));
+cpu CPU1(.clk(clk),.reset(reset),.reset_all(reset_all));
 
 initial begin
     clk =0;
@@ -14,7 +14,12 @@ end
 initial
     begin
         reset =1;
-        #11;
+        reset_all=1;
+        #6;
         reset =0;
+        reset_all=0;
+
+        repeat(35)@(posedge clk);
+        $stop;
     end
 endmodule
