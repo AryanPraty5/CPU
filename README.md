@@ -72,7 +72,11 @@ Every instruction begins with a universal 2-phase Fetch (PC drives address → R
 
 `ADD/SUB` automatically stores the value so that the programs stored in RAM are used efficiently.This saves up space by not including the `STORE's` program in the RAM.
 
+## Schematic 
+![Schematic](assets/schematic.png)
 
+## Simulation Waveform
+![Simulation Results](assets/simulation.png)
 ## Tools Used
 
 - AMD Xilinx Vivado (behavioral simulation, waveform analysis, synthesized schematics)
