@@ -4,7 +4,7 @@
 
 A custom 8-bit CPU built bottom-up in Verilog — starting from individual logic gates and progressing to a full datapath with a microcoded control unit, simulated and verified in AMD Xilinx Vivado.
 
-**Status:** Datapath and Control Unit FSM are written and wired into a top-level `cpu` module. Currently debugging full integration (bus timing across PC, RAM, IR, registers, and ALU working together under automatic control). Not yet running a complete instruction set end-to-end — actively in progress.
+**Status:** Datapath and Control Unit FSM are written and wired into a top-level `cpu` module.Running a complete instruction set end-to-end — actively in progress.
 
 ## Why this project
 
@@ -40,7 +40,7 @@ Each module was built, tested, and debugged in isolation before being connected 
                        └─────────┘
 ```
 
-## Instruction Set (so far)
+## Instruction Set
 
 | Opcode | Instruction | States |
 |---|---|---|
@@ -70,11 +70,8 @@ Every instruction begins with a universal 2-phase Fetch (PC drives address → R
 
 **RAM access costs 2 states, not 1.** Because RAM only latches a new address on a clock edge and only drives valid data the cycle after, every instruction touching memory (LOAD, STORE, LOADB, and Fetch itself) needs two FSM states. ADD, SUB, JUMP, and OUT need only one state each, since they don't touch RAM and the ALU computes combinationally.
 
-## What's left
+`ADD/SUB` automatically stores the value so that the programs stored in RAM are used efficiently.This saves up space by not including the `STORE's` program in the RAM.
 
-- Debug full bus integration under automatic Control Unit sequencing (currently in progress)
-- Hand-assemble a small test program and verify correct execution end-to-end
-- Stretch goal: run a Fibonacci sequence as the final correctness benchmark
 
 ## Tools Used
 
