@@ -19,7 +19,7 @@ initial
         reset =0;
         reset_all=0;
 
-        repeat(35)@(posedge clk);
+        repeat(100)@(posedge clk);
         $stop;
     end
 endmodule
